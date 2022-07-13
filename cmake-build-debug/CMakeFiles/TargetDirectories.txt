@@ -1,0 +1,3 @@
+/Volumes/Mac/Develop/ClionProject/SCPPSocket/cmake-build-debug/CMakeFiles/SCPPSocket.dir
+/Volumes/Mac/Develop/ClionProject/SCPPSocket/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Volumes/Mac/Develop/ClionProject/SCPPSocket/cmake-build-debug/CMakeFiles/rebuild_cache.dir
