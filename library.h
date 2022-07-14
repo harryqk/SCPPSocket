@@ -3,4 +3,6 @@
 
 void hello();
 
+int Accept();
+
 #endif //SCPPSOCKET_LIBRARY_H

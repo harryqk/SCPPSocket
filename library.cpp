@@ -16,3 +16,17 @@ void hello() {
 #endif
 
 }
+
+int Accept()
+{
+#ifdef _WIN32
+    return 0;
+#elifd  __linux__
+    return 1;
+#elif __APPLE__
+    return 2;
+#elif __ANDROID__
+    return 3;
+#endif
+
+}
