@@ -7,11 +7,11 @@ void hello() {
 
 #ifdef _WIN32
     std::cout << "Hello, World win!" << std::endl;
-#elif _linux_
+#elifd  __linux__
     std::cout << "Hello, World linux!" << std::endl;
-#elif _APPLE_
+#elif __APPLE__
     std::cout << "Hello, World mac!" << std::endl;
-#elif _ANDROID_
+#elif __ANDROID__
     std::cout << "Hello, World android!" << std::endl;
 #endif
 
