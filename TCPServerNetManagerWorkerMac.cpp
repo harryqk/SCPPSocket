@@ -22,7 +22,7 @@ namespace scppsocket
             printf("server waiting\n");
 
             //Block until certain fd readable or error return, FD_SETSIZE is max system fd value
-            result = select(FD_SETSIZE, &testfds, (fd_set *) nullptr,(fd_set *)nullptr, (struct timeval *) nullptr); //FD_SETSIZE：系统默认的最大文件描述符
+            result = select(FD_SETSIZE, &testfds, (fd_set *) nullptr,(fd_set *)nullptr, (struct timeval *) nullptr);
             if(result < 1)
             {
                 printf("mac server select return errno=%d\n", errno);

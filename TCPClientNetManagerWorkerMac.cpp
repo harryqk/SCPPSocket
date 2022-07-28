@@ -28,7 +28,7 @@ namespace scppsocket
             testfds = readfds;
             printf("client waiting\n");
 
-            //Block untill certain fd readable or error return, FD_SETSIZE is max system fd value
+            //Block until certain fd readable or error return, FD_SETSIZE is max system fd value
             result = select(FD_SETSIZE, &testfds, (fd_set *) nullptr,(fd_set *)nullptr, (struct timeval *) nullptr);
 
 
