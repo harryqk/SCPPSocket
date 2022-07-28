@@ -21,13 +21,13 @@ endif ()
 
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-
+aux_source_directory(. DIR_SRCS)
 if (MACOS)
-    add_library(SCPPSocketMac library.cpp)
+    add_library(SCPPSocketMac ${DIR_SRCS})
 elseif (WINDOWS)
     add_library(SCPPSocketWin library.cpp)
 elseif (LINUX)
-    add_library(SCPPSocketLinux library.cpp)
+    add_library(SCPPSocketLinux library.cpp cmake-build-debug/SCPPSocketFactoryWin.cpp cmake-build-debug/SCPPSocketFactoryWin.h)
 endif ()
 
 
