@@ -18,12 +18,14 @@ namespace scppsocket
         void StartTCPClient(const char* Address, int Port);
         void StopTCPClient();
         void TCPClientSendMessage(const char* Msg, int Len);
+        void Clear();
         NetManager();
         ~NetManager();
     private:
 
         NetManagerWorker* ClientWorker;
         NetManagerWorker* ServerWorker;
+        SCPPSocket* Local;
         void StartTCPClientSubThread(const char* Address, int Port);
         //std::list<Connection*> ConnectionsToClient;
         //Connection* ConnectionToServer;

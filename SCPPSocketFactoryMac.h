@@ -14,7 +14,7 @@ namespace scppsocket
         virtual SCPPSocket* CreateSocket(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol) override;
         virtual sockaddr_in CreateAddress(const char* Address, int Port) override;
         virtual NetManagerWorker* CreateTCPServerNetMangerWorker(SCPPSocket* Local) override;
-        virtual NetManagerWorker* CreateTCPClientNetMangerWorker(Connection* ConnectionToServer) override;
+        virtual NetManagerWorker* CreateTCPClientNetMangerWorker(SCPPSocket* Local) override;
     };
 
 }

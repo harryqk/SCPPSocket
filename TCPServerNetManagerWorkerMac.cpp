@@ -118,10 +118,15 @@ namespace scppsocket
 
     TCPServerNetManagerWorkerMac::~TCPServerNetManagerWorkerMac()
     {
-        if(Local != nullptr)
-        {
-            delete Local;
-            Local = nullptr;
+        delete LenBuf;
+        LenBuf = nullptr;
+        delete ReadBuf;
+        ReadBuf = nullptr;
+        while(!ConnectionsToClient.empty()){
+            Connection* Conn = ConnectionsToClient.front();
+            ConnectionsToClient.pop_front();
+            delete Conn;
+            Conn = nullptr;
         }
         std::printf("destruct TCPServerNetManagerWorkerMac\n");
     }
@@ -147,15 +152,12 @@ namespace scppsocket
         LenBuf = nullptr;
         delete ReadBuf;
         ReadBuf = nullptr;
-        while(!ConnectionsToClient.empty()){
-            Connection* Conn = ConnectionsToClient.front();
-            ConnectionsToClient.pop_front();
-            if(Conn->GetSSock())
-            {
-                Conn->GetSSock()->Close();
-            }
-            delete Conn;
-            Conn = nullptr;
+        std::list<Connection*>::iterator p1;
+        for(p1=ConnectionsToClient.begin();p1!=ConnectionsToClient.end();p1++)
+        {
+            Connection* Conn = (Connection*)*p1;
+            Conn->GetSSock()->ShutDown();
+            Conn->GetSSock()->Close();
         }
         if(Local != nullptr)
         {

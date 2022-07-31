@@ -130,11 +130,6 @@ namespace scppsocket
 
     TCPConnection::~TCPConnection()
     {
-        if(SSock != nullptr)
-        {
-            delete SSock;
-            SSock = nullptr;
-        }
         std::printf("destruct TCPConnection\n");
     }
 }

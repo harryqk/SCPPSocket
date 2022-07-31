@@ -5,18 +5,19 @@
 #include "TCPClientNetManagerWorkerMac.h"
 #include "SocketUtil.h"
 #include <sys/select.h>
+#include "TCPConnection.h"
 namespace scppsocket
 {
 
     void TCPClientNetManagerWorkerMac::DoWork()
     {
         int nread;
-        int fd = ConnectionToServer->GetSSock()->GetFileDescriptor();
+        int fd = Local->GetFileDescriptor();
         int ret = HandleConnect();
         int result;
         if(ret == SOCKET_ERROR)
         {
-            ConnectionToServer->GetSSock()->Close();
+            Local->Close();
             return;
         }
         FD_ZERO(&readfds);
@@ -36,7 +37,7 @@ namespace scppsocket
             {
                 printf("mac client select return errno=%d\n", errno);
                 perror("mac client select return error");
-                ConnectionToServer->GetSSock()->Close();
+                Local->Close();
                 printf("client close socket on fd %d\n", fd);
                 break;
             }
@@ -48,7 +49,7 @@ namespace scppsocket
                 //Server shutdown, close client
                 if(nread == 0)
                 {
-                    ConnectionToServer->GetSSock()->Close();
+                    Local->Close();
                     printf("client close socket on fd %d\n", fd);
                     break;
                     //close(fd);
@@ -84,7 +85,12 @@ namespace scppsocket
 
     TCPClientNetManagerWorkerMac::~TCPClientNetManagerWorkerMac()
     {
-
+        delete ReadBuf;
+        ReadBuf = nullptr;
+        delete LenBuf;
+        LenBuf = nullptr;
+        delete ConnectionToServer;
+        ConnectionToServer = nullptr;
         std::printf("destruct TCPClientNetManagerWorkerMac\n");
     }
 
@@ -99,7 +105,6 @@ namespace scppsocket
         int client_fd;
         int result;
         int ret = SOCKET_ERROR;
-        SCPPSocket* Local = ConnectionToServer->GetSSock();
         client_fd = Local->GetFileDescriptor();
 
         result = Local->Connect((sockaddr*)&Local->GetPeerAddress());
@@ -131,6 +136,8 @@ namespace scppsocket
                 {
                     if(FD_ISSET(client_fd,&wset))
                     {
+                        Connection* Conn = new TCPConnection(Local);
+                        ConnectionToServer = Conn;
                         printf("connect succeed.\n");
                         //Local->SetFileDescriptor(result);
                         ret = 0;
@@ -148,14 +155,12 @@ namespace scppsocket
 
     void TCPClientNetManagerWorkerMac::StopWork()
     {
-        delete ReadBuf;
-        ReadBuf = nullptr;
-        delete LenBuf;
-        LenBuf = nullptr;
-        ConnectionToServer->GetSSock()->ShutDown();
-        ConnectionToServer->GetSSock()->Close();
-        delete ConnectionToServer;
-        ConnectionToServer = nullptr;
+
+        if(ConnectionToServer != nullptr && ConnectionToServer->GetSSock() != nullptr)
+        {
+            ConnectionToServer->GetSSock()->ShutDown();
+            ConnectionToServer->GetSSock()->Close();
+        }
         std::printf("TCPClientNetManagerWorkerMac StopWork\n");
     }
 }

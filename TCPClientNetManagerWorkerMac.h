@@ -22,6 +22,7 @@ namespace scppsocket
         char* ReadBuf;
     public:
         Connection *ConnectionToServer;
+        SCPPSocket* Local;
         virtual void DoWork() override;
         virtual void SendMessage(const char *Msg, int Len) override;
         virtual void StopWork() override;

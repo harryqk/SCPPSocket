@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(SCPPSocket)
 set(CMAKE_CXX_STANDARD 14)
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fms-extensions")
 if (CMAKE_HOST_WIN32)
     set(WINDOWS 1)
 elseif (CMAKE_HOST_APPLE)
@@ -26,9 +26,9 @@ aux_source_directory(. DIR_SRCS)
 if (MACOS)
     add_library(SCPPSocketMac ${DIR_SRCS})
 elseif (WINDOWS)
-    add_library(SCPPSocketWin library.cpp)
+    add_library(SCPPSocketWin Lib4Unity.cpp)
 elseif (LINUX)
-    add_library(SCPPSocketLinux library.cpp cmake-build-debug/SCPPSocketFactoryWin.cpp cmake-build-debug/SCPPSocketFactoryWin.h)
+    add_library(SCPPSocketLinux Lib4Unity.cpp cmake-build-debug/SCPPSocketFactoryWin.cpp cmake-build-debug/SCPPSocketFactoryWin.h)
 endif ()
 
 

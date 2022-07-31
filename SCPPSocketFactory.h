@@ -16,7 +16,7 @@ namespace scppsocket
         virtual SCPPSocket* CreateSocket(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol) = 0;
         virtual sockaddr_in CreateAddress(const char* Address, int Port) = 0;
         virtual NetManagerWorker* CreateTCPServerNetMangerWorker(SCPPSocket* Local) = 0;
-        virtual NetManagerWorker* CreateTCPClientNetMangerWorker(Connection* ConnectionToServer) = 0;
+        virtual NetManagerWorker* CreateTCPClientNetMangerWorker(SCPPSocket* Local) = 0;
     };
 }
 

@@ -25,10 +25,11 @@ namespace scppsocket
         return server_addr;
     }
 
-    NetManagerWorker *SCPPSocketFactoryMac::CreateTCPClientNetMangerWorker(Connection *ConnectionToServer)
+    NetManagerWorker *SCPPSocketFactoryMac::CreateTCPClientNetMangerWorker(SCPPSocket* Local)
     {
         TCPClientNetManagerWorkerMac* Mac = new TCPClientNetManagerWorkerMac();
-        Mac->ConnectionToServer = ConnectionToServer;
+        Mac->Local = Local;
+        //Mac->ConnectionToServer = ConnectionToServer;
         return Mac;
     }
 
@@ -41,12 +42,12 @@ namespace scppsocket
 
     SCPPSocketFactoryMac::SCPPSocketFactoryMac()
     {
-
+        std::printf("construct SCPPSocketFactoryMac\n");
     }
 
     SCPPSocketFactoryMac::~SCPPSocketFactoryMac()
     {
-
+        std::printf("destruct SCPPSocketFactoryMac\n");
     }
 
 

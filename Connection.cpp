@@ -19,8 +19,6 @@ namespace scppsocket
 
     Connection::~Connection()
     {
-        delete SSock;
-        SSock = nullptr;
         std::printf("destruct Connection\n");
     }
 }

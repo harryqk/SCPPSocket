@@ -30,21 +30,20 @@ namespace scppsocket
         Factory = new SCPPSocketFactoryMac();
 #elif __ANDROID__
 #endif
-        SCPPSocket* Socket = Factory->CreateSocket(SocketAddressFamily::IPv4, SocketType::SOCKTYPE_Streaming, SocketProtocol::TCP);
+        Local = Factory->CreateSocket(SocketAddressFamily::IPv4, SocketType::SOCKTYPE_Streaming, SocketProtocol::TCP);
 
         //connect
         sockaddr_in ServerAddress = Factory->CreateAddress(Address, Port);
-        Socket->SetPeerAddress(ServerAddress);
+        Local->SetPeerAddress(ServerAddress);
         //set NonBlockMode
-        int ret = Socket->SetNonBlockMode(true);
+        int ret = Local->SetNonBlockMode(true);
         if(ret != SocketBlockMode::NonBlock)
         {
             std::printf("Set NonBlock mode fail\n");
             return;
         }
 
-        Connection* ConnectionToServer = new TCPConnection(Socket);
-        ClientWorker = Factory->CreateTCPClientNetMangerWorker(ConnectionToServer);
+        ClientWorker = Factory->CreateTCPClientNetMangerWorker(Local);
         ClientWorker->SetIsWorking(true);
         std::thread thd([&]()
                         {
@@ -61,7 +60,6 @@ namespace scppsocket
         {
             ServerWorker->SetIsWorking(false);
             ServerWorker->StopWork();
-            delete ServerWorker;
         }
     }
 
@@ -71,7 +69,6 @@ namespace scppsocket
         {
             ClientWorker->SetIsWorking(false);
             ClientWorker->StopWork();
-            delete ClientWorker;
         }
     }
 
@@ -101,10 +98,10 @@ namespace scppsocket
         Factory = new SCPPSocketFactoryMac();
 #elif __ANDROID__
 #endif
-        SCPPSocket* Socket = Factory->CreateSocket(SocketAddressFamily::IPv4, SocketType::SOCKTYPE_Streaming, SocketProtocol::TCP);
+        Local = Factory->CreateSocket(SocketAddressFamily::IPv4, SocketType::SOCKTYPE_Streaming, SocketProtocol::TCP);
 
         //set NonBlockMode
-        bool ret = Socket->SetNonBlockMode(true);
+        bool ret = Local->SetNonBlockMode(true);
         if(!ret)
         {
             std::printf("Set NonBlock mode fail");
@@ -112,20 +109,20 @@ namespace scppsocket
         }
         //bind
         int result;
-        result = Socket->Bind(Port);
+        result = Local->Bind(Port);
         if(result == SOCKET_ERROR)
         {
             std::printf("Bind fail");
             return false;
         }
         //listen;
-        result = Socket->Listen(MaxConnection);
+        result = Local->Listen(MaxConnection);
         if(result == SOCKET_ERROR)
         {
             std::printf("Listen fail");
             return false;
         }
-        ServerWorker = Factory->CreateTCPServerNetMangerWorker(Socket);
+        ServerWorker = Factory->CreateTCPServerNetMangerWorker(Local);
         ServerWorker->SetIsWorking(true);
         std::thread thd([&]()
                         {
@@ -136,6 +133,25 @@ namespace scppsocket
         delete Factory;
         Factory = nullptr;
         return true;
+    }
+
+    void NetManager::Clear()
+    {
+        if(Local != nullptr)
+        {
+            delete Local;
+            Local= nullptr;
+        }
+        if(ClientWorker != nullptr)
+        {
+            delete ClientWorker;
+            ClientWorker = nullptr;
+        }
+        if(ServerWorker != nullptr)
+        {
+            delete ServerWorker;
+            ServerWorker = nullptr;
+        }
     }
 }
 
