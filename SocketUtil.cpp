@@ -4,6 +4,7 @@
 
 #include "SocketUtil.h"
 #include <iostream>
+#include <cstring>
 namespace scppsocket
 {
 

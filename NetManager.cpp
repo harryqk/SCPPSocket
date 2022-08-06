@@ -4,7 +4,13 @@
 
 #include "NetManager.h"
 #include <iostream>
-#include "SCPPSocketFactoryMac.h"
+#ifdef _WIN32
+#include "Win/SCPPSocketFactoryWin.h"
+#elif __APPLE__
+#include "Mac/SCPPSocketFactoryMac.h"
+#elif __ANDROID__
+#endif
+
 #include "SCPPSocket.h"
 #include "TCPConnection.h"
 #include "SocketUtil.h"
@@ -20,10 +26,37 @@ namespace scppsocket
         std::cout << "Destruct NetManager" << std::endl;
     }
 
+    void NetManager::Init()
+    {
+        #ifdef _WIN32
+                // Initialize Winsock
+                WSADATA wsaData;
+                int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+                if (iResult != NO_ERROR) {
+                    wprintf(L"WSAStartup function failed with error: %d\n", iResult);
+                    return;
+                }
+        #elif __APPLE__
+
+        #elif __ANDROID__
+        #endif
+    }
+
+    void NetManager::Cleanup()
+    {
+        #ifdef _WIN32
+                WSACleanup();
+        #elif __APPLE__
+
+        #elif __ANDROID__
+        #endif
+    }
+
 
     void NetManager::StartTCPClient(const char* Address, int Port)
     {
         SCPPSocketFactory* Factory;
+        Init();
 #ifdef _WIN32
         Factory = new SCPPSocketFactoryWin();
 #elif __APPLE__
@@ -32,6 +65,12 @@ namespace scppsocket
 #endif
         Local = Factory->CreateSocket(SocketAddressFamily::IPv4, SocketType::SOCKTYPE_Streaming, SocketProtocol::TCP);
 
+        if(Local->GetFileDescriptor() == SOCKET_ERROR)
+        {
+            std::printf("CreateSocket Error\n");
+            Cleanup();
+            return;
+        }
         //connect
         sockaddr_in ServerAddress = Factory->CreateAddress(Address, Port);
         Local->SetPeerAddress(ServerAddress);
@@ -40,6 +79,7 @@ namespace scppsocket
         if(ret != SocketBlockMode::NonBlock)
         {
             std::printf("Set NonBlock mode fail\n");
+            Cleanup();
             return;
         }
 
@@ -92,6 +132,7 @@ namespace scppsocket
     bool NetManager::StartTCPServer(int Port, int MaxConnection)
     {
         SCPPSocketFactory* Factory;
+        Init();
 #ifdef _WIN32
         Factory = new SCPPSocketFactoryWin();
 #elif __APPLE__
@@ -105,6 +146,7 @@ namespace scppsocket
         if(!ret)
         {
             std::printf("Set NonBlock mode fail");
+            Cleanup();
             return false;
         }
         //bind
@@ -113,6 +155,7 @@ namespace scppsocket
         if(result == SOCKET_ERROR)
         {
             std::printf("Bind fail");
+            Cleanup();
             return false;
         }
         //listen;
@@ -120,6 +163,7 @@ namespace scppsocket
         if(result == SOCKET_ERROR)
         {
             std::printf("Listen fail");
+            Cleanup();
             return false;
         }
         ServerWorker = Factory->CreateTCPServerNetMangerWorker(Local);
@@ -152,6 +196,7 @@ namespace scppsocket
             delete ServerWorker;
             ServerWorker = nullptr;
         }
+        Cleanup();
     }
 }
 

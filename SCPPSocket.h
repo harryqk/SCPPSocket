@@ -8,7 +8,10 @@
 #ifdef _WIN32
 
 #include <winsock2.h>
-
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <stdio.h>
+#pragma comment(lib, "ws2_32.lib")
 typedef SOCKET SSocket;
 typedef int SockLen_t;
 typedef int SockSize_t;
@@ -33,7 +36,6 @@ typedef ssize_t SockSSize_t;
 
 #endif
 #define SOCKET_ERROR (-1)
-#define INVALID_SOCKET  0
 namespace scppsocket
 {
 

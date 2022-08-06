@@ -1,16 +1,15 @@
 //
-// Created by harryqk on 7/21/22.
+// Created by WIN10 on 2022/8/1.
 //
 
-#ifndef SCPPSOCKET_TCPSERVERNETMANAGERWORKERMAC_H
-#define SCPPSOCKET_TCPSERVERNETMANAGERWORKERMAC_H
-#include "NetManagerWorker.h"
+#ifndef SCPPSOCKET_TCPSERVERNETMANAGERWORKERWIN_H
+#define SCPPSOCKET_TCPSERVERNETMANAGERWORKERWIN_H
+#include "../NetManagerWorker.h"
 #include <list>
-#include "SocketUtil.h"
+#include "../SocketUtil.h"
 namespace scppsocket
 {
-
-    class TCPServerNetManagerWorkerMac:public NetManagerWorker
+    class TCPServerNetManagerWorkerWin:public NetManagerWorker
     {
         std::list<Connection*> ConnectionsToClient;
         SCPPSocket* Local;
@@ -28,8 +27,8 @@ namespace scppsocket
         char* LenBuf;
         char* ReadBuf;
     public:
-        TCPServerNetManagerWorkerMac();
-        virtual ~TCPServerNetManagerWorkerMac() override;
+        TCPServerNetManagerWorkerWin();
+        virtual ~TCPServerNetManagerWorkerWin() override;
         int GetMacConnection() const;
         virtual void DoWork() override;
         void SetMacConnection(int macConnection);
@@ -40,4 +39,4 @@ namespace scppsocket
 }
 
 
-#endif //SCPPSOCKET_TCPSERVERNETMANAGERWORKERMAC_H
+#endif //SCPPSOCKET_TCPSERVERNETMANAGERWORKERWIN_H

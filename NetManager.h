@@ -23,13 +23,14 @@ namespace scppsocket
         ~NetManager();
     private:
 
-        NetManagerWorker* ClientWorker;
-        NetManagerWorker* ServerWorker;
+        NetManagerWorker* ClientWorker = nullptr;
+        NetManagerWorker* ServerWorker = nullptr;
         SCPPSocket* Local;
         void StartTCPClientSubThread(const char* Address, int Port);
         //std::list<Connection*> ConnectionsToClient;
         //Connection* ConnectionToServer;
-
+        void Init();
+        void Cleanup();
 
 
     };
