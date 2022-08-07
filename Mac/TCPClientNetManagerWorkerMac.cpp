@@ -3,9 +3,9 @@
 //
 
 #include "TCPClientNetManagerWorkerMac.h"
-#include "SocketUtil.h"
+#include "../SocketUtil.h"
 #include <sys/select.h>
-#include "TCPConnection.h"
+#include "../TCPConnection.h"
 namespace scppsocket
 {
 
@@ -37,6 +37,7 @@ namespace scppsocket
             {
                 printf("mac client select return errno=%d\n", errno);
                 perror("mac client select return error");
+                FD_CLR(Local->GetFileDescriptor(), &readfds);
                 Local->Close();
                 printf("client close socket on fd %d\n", fd);
                 break;
@@ -49,6 +50,7 @@ namespace scppsocket
                 //Server shutdown, close client
                 if(nread == 0)
                 {
+                    FD_CLR(Local->GetFileDescriptor(), &readfds);
                     Local->Close();
                     printf("client close socket on fd %d\n", fd);
                     break;
@@ -68,7 +70,7 @@ namespace scppsocket
                 }
             }
         }
-
+        printf("client do work finish\n");
     }
 
     void TCPClientNetManagerWorkerMac::SendMessage(const char *Msg, int Len)
@@ -85,12 +87,17 @@ namespace scppsocket
 
     TCPClientNetManagerWorkerMac::~TCPClientNetManagerWorkerMac()
     {
-        delete ReadBuf;
+        delete[] ReadBuf;
         ReadBuf = nullptr;
-        delete LenBuf;
+        delete[] LenBuf;
         LenBuf = nullptr;
-        delete ConnectionToServer;
-        ConnectionToServer = nullptr;
+        if(ConnectionToServer != nullptr)
+        {
+            delete ConnectionToServer;
+            ConnectionToServer = nullptr;
+        }
+
+
         std::printf("destruct TCPClientNetManagerWorkerMac\n");
     }
 
@@ -158,6 +165,7 @@ namespace scppsocket
 
         if(ConnectionToServer != nullptr && ConnectionToServer->GetSSock() != nullptr)
         {
+            FD_CLR(ConnectionToServer->GetSSock()->GetFileDescriptor(), &readfds);
             ConnectionToServer->GetSSock()->ShutDown();
             ConnectionToServer->GetSSock()->Close();
         }

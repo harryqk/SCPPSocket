@@ -4,7 +4,7 @@
 
 #ifndef SCPPSOCKET_TCPCLIENTNETMANAGERWORKERMAC_H
 #define SCPPSOCKET_TCPCLIENTNETMANAGERWORKERMAC_H
-#include "NetManagerWorker.h"
+#include "../NetManagerWorker.h"
 namespace scppsocket
 {
 

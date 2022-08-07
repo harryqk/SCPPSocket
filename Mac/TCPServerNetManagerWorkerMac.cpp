@@ -3,7 +3,7 @@
 //
 
 #include "TCPServerNetManagerWorkerMac.h"
-#include "TCPConnection.h"
+#include "../TCPConnection.h"
 #include <iostream>
 namespace scppsocket
 {
@@ -27,6 +27,7 @@ namespace scppsocket
             {
                 printf("mac server select return errno=%d\n", errno);
                 perror("mac server select return error");
+                FD_CLR(Local->GetFileDescriptor(), &readfds);
                 Local->Close();
                 break;
             }
@@ -40,7 +41,7 @@ namespace scppsocket
                 HandleRead();
             }
         }
-        printf("server finish\n");
+        printf("server do work finish\n");
     }
 
     int TCPServerNetManagerWorkerMac::GetMacConnection() const
@@ -95,12 +96,14 @@ namespace scppsocket
                     conn->Read(LenBuf, 4);
                     int len = SocketUtil::BytesToInt((byte *)LenBuf);
                     conn->Read(ReadBuf, len);
-                    char* msg = new char[len];
+                    char* msg = new char[len + 1];
                     memcpy(msg, ReadBuf, len);
+                    msg[len] = '\0';
                     std::cout << len << std::endl;
                     std::cout << msg << std::endl;
                     it++;
                     printf("server read  %s\n", msg);
+                    delete[] msg;
                 }
             } else
             {
@@ -148,19 +151,21 @@ namespace scppsocket
 
     void TCPServerNetManagerWorkerMac::StopWork()
     {
-        delete LenBuf;
+        delete[] LenBuf;
         LenBuf = nullptr;
-        delete ReadBuf;
+        delete[] ReadBuf;
         ReadBuf = nullptr;
         std::list<Connection*>::iterator p1;
         for(p1=ConnectionsToClient.begin();p1!=ConnectionsToClient.end();p1++)
         {
             Connection* Conn = (Connection*)*p1;
+            FD_CLR(Conn->GetSSock()->GetFileDescriptor(), &readfds);
             Conn->GetSSock()->ShutDown();
             Conn->GetSSock()->Close();
         }
         if(Local != nullptr)
         {
+            FD_CLR(Local->GetFileDescriptor(), &readfds);
             Local->ShutDown();
             Local->Close();
         }

@@ -4,7 +4,7 @@
 
 #ifndef SCPPSOCKET_SCPPSOCKETMAC_H
 #define SCPPSOCKET_SCPPSOCKETMAC_H
-#include "SCPPSocket.h"
+#include "../SCPPSocket.h"
 namespace scppsocket
 {
     class SCPPSocketMac :public SCPPSocket
