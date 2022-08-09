@@ -4,10 +4,10 @@
 
 #ifndef SCPPSOCKET_TCPCLIENTNETMANAGERWORKERWIN_H
 #define SCPPSOCKET_TCPCLIENTNETMANAGERWORKERWIN_H
-#include "../NetManagerWorker.h"
+#include "../NetManagerWorkerClient.h"
 namespace scppsocket
 {
-    class TCPClientNetManagerWorkerWin:public NetManagerWorker
+    class TCPClientNetManagerWorkerWin:public NetManagerWorkerClient
     {
     public:
         TCPClientNetManagerWorkerWin();
@@ -17,11 +17,9 @@ namespace scppsocket
         void HandleRead();
         fd_set readfds;
         fd_set testfds;
-        char* LenBuf;
-        char* ReadBuf;
+
     public:
-        Connection *ConnectionToServer;
-        SCPPSocket* Local;
+
         virtual void DoWork() override;
         virtual void SendMessage(const char *Msg, int Len) override;
         virtual void StopWork() override;

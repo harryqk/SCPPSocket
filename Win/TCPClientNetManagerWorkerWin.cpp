@@ -125,10 +125,14 @@ namespace scppsocket
                     //ConnectionToServer->Read(LenBuf, 4);
                     int len = SocketUtil::BytesToInt((byte *)LenBuf);
                     ConnectionToServer->Read(ReadBuf, len);
-                    char* msg = new char[len];
-                    memcpy(msg, ReadBuf, len);
-                    printf("client read  %d\n", len);
-                    printf("client read  %s\n", msg);
+//                    char* msg = new char[len];
+//                    memcpy(msg, ReadBuf, len);
+//                    printf("client read  %d\n", len);
+//                    printf("client read  %s\n", msg);
+                    if(OnClientMessageRead != nullptr)
+                    {
+                        OnClientMessageRead(ReadBuf, len);
+                    }
                 }
             }
         }
@@ -142,22 +146,11 @@ namespace scppsocket
 
     TCPClientNetManagerWorkerWin::TCPClientNetManagerWorkerWin()
     {
-        LenBuf = new char[4];
-        ReadBuf = new char[1024];
         std::printf("construct TCPClientNetManagerWorkerWin\n");
     }
 
     TCPClientNetManagerWorkerWin::~TCPClientNetManagerWorkerWin()
     {
-        delete[] ReadBuf;
-        ReadBuf = nullptr;
-        delete[] LenBuf;
-        LenBuf = nullptr;
-        if(ConnectionToServer != nullptr)
-        {
-            delete ConnectionToServer;
-            ConnectionToServer = nullptr;
-        }
         std::printf("destruct TCPClientNetManagerWorkerWin\n");
     }
 
