@@ -44,15 +44,6 @@ namespace scppsocket
         printf("server do work finish\n");
     }
 
-    int TCPServerNetManagerWorkerMac::GetMacConnection() const
-    {
-        return MacConnection;
-    }
-
-    void TCPServerNetManagerWorkerMac::SetMacConnection(int macConnection)
-    {
-        MacConnection = macConnection;
-    }
 
     void TCPServerNetManagerWorkerMac::HandleAccept()
     {
@@ -96,14 +87,18 @@ namespace scppsocket
                     conn->Read(LenBuf, 4);
                     int len = SocketUtil::BytesToInt((byte *)LenBuf);
                     conn->Read(ReadBuf, len);
-                    char* msg = new char[len + 1];
-                    memcpy(msg, ReadBuf, len);
-                    msg[len] = '\0';
-                    std::cout << len << std::endl;
-                    std::cout << msg << std::endl;
+//                    char* msg = new char[len + 1];
+//                    memcpy(msg, ReadBuf, len);
+//                    msg[len] = '\0';
+//                    std::cout << len << std::endl;
+//                    std::cout << msg << std::endl;
+//                    printf("server read  %s\n", msg);
+//                    delete[] msg;
+                    if(OnServerMessageRead != nullptr)
+                    {
+                        OnServerMessageRead(conn->GetSSock()->GetFileDescriptor(), ReadBuf, len);
+                    }
                     it++;
-                    printf("server read  %s\n", msg);
-                    delete[] msg;
                 }
             } else
             {
@@ -114,39 +109,36 @@ namespace scppsocket
 
     TCPServerNetManagerWorkerMac::TCPServerNetManagerWorkerMac()
     {
-        LenBuf = new char[4];
-        ReadBuf = new char[1024];
         std::printf("construct TCPServerNetManagerWorkerMac\n");
     }
 
     TCPServerNetManagerWorkerMac::~TCPServerNetManagerWorkerMac()
     {
-        delete LenBuf;
-        LenBuf = nullptr;
-        delete ReadBuf;
-        ReadBuf = nullptr;
-        while(!ConnectionsToClient.empty()){
-            Connection* Conn = ConnectionsToClient.front();
-            ConnectionsToClient.pop_front();
-            delete Conn;
-            Conn = nullptr;
-        }
         std::printf("destruct TCPServerNetManagerWorkerMac\n");
     }
 
-    void TCPServerNetManagerWorkerMac::SendMessage(const char *Msg, int Len)
+    void TCPServerNetManagerWorkerMac::SendMessage(int FileDescriptor, const char* Msg, int Len)
     {
-
+        std::list<Connection*>::iterator p1;
+        for(p1=ConnectionsToClient.begin();p1!=ConnectionsToClient.end();p1++)
+        {
+            Connection* Conn = (Connection*)*p1;
+            if(Conn->GetSSock()->GetFileDescriptor() == FileDescriptor)
+            {
+                Conn->Send(Msg, Len);
+                break;
+            }
+        }
     }
 
-    SCPPSocket *scppsocket::TCPServerNetManagerWorkerMac::GetLocal() const
+    void TCPServerNetManagerWorkerMac::Broadcast(const char *Msg, int Len)
     {
-        return Local;
-    }
-
-    void TCPServerNetManagerWorkerMac::SetLocal(scppsocket::SCPPSocket *local)
-    {
-        Local = local;
+        std::list<Connection*>::iterator p1;
+        for(p1=ConnectionsToClient.begin();p1!=ConnectionsToClient.end();p1++)
+        {
+            Connection* Conn = (Connection*)*p1;
+            Conn->Send(Msg, Len);
+        }
     }
 
     void TCPServerNetManagerWorkerMac::StopWork()

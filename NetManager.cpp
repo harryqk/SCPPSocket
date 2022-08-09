@@ -85,6 +85,8 @@ namespace scppsocket
 
         ClientWorker = Factory->CreateTCPClientNetMangerWorker(Local);
         ClientWorker->SetIsWorking(true);
+        NetManagerWorkerClient* WorkerClient = (NetManagerWorkerClient*)ClientWorker;
+        WorkerClient->SetOnClientMessageReadDelegate(OnClientMessageRead) ;
         std::thread thd([&]()
                         {
                             ClientWorker->DoWork();
@@ -121,12 +123,8 @@ namespace scppsocket
         char* sendBuff = new char[Len + 4];//4 is byte length of data
         memcpy(sendBuff, bytes, 4);
         memcpy(sendBuff + 4, Msg, Len);
-        ClientWorker->SendMessage(sendBuff, Len + 4);
-    }
-
-    void NetManager::StartTCPClientSubThread(const char* Address, int Port)
-    {
-
+        NetManagerWorkerClient* WorkerClient = (NetManagerWorkerClient*)ClientWorker;
+        WorkerClient->SendMessage(sendBuff, Len + 4);
     }
 
     bool NetManager::StartTCPServer(int Port, int MaxConnection)
@@ -168,6 +166,8 @@ namespace scppsocket
         }
         ServerWorker = Factory->CreateTCPServerNetMangerWorker(Local);
         ServerWorker->SetIsWorking(true);
+        NetManagerWorkerServer* WorkerServer = (NetManagerWorkerServer*)ServerWorker;
+        WorkerServer->SetOnServerMessageReadDelegate(OnServerMessageRead) ;
         std::thread thd([&]()
                         {
                             ServerWorker->DoWork();
@@ -198,6 +198,41 @@ namespace scppsocket
         }
         Cleanup();
     }
+
+
+    void NetManager::TCPServerBroadcast(const char *Msg, int Len)
+    {
+        byte* bytes = new byte[4];
+        SocketUtil::IntToByte(Len, bytes);
+        char* sendBuff = new char[Len + 4];//4 is byte length of data
+        memcpy(sendBuff, bytes, 4);
+        memcpy(sendBuff + 4, Msg, Len);
+        NetManagerWorkerServer* WorkerServer = (NetManagerWorkerServer*)ServerWorker;
+        WorkerServer->Broadcast(sendBuff, Len + 4);
+    }
+
+    void NetManager::TCPServerSendMessage(int FileDescriptor, const char *Msg, int Len)
+    {
+        byte* bytes = new byte[4];
+        SocketUtil::IntToByte(Len, bytes);
+        char* sendBuff = new char[Len + 4];//4 is byte length of data
+        memcpy(sendBuff, bytes, 4);
+        memcpy(sendBuff + 4, Msg, Len);
+        NetManagerWorkerServer* WorkerServer = (NetManagerWorkerServer*)ServerWorker;
+        WorkerServer->SendMessage(FileDescriptor, sendBuff, Len + 4);
+    }
+
+    void NetManager::SetOnClientMessageRead(OnClientMessageReadDelegate Delegate)
+    {
+        OnClientMessageRead = Delegate;
+    }
+
+    void NetManager::SetOnServerMessageRead(OnServerMessageReadDelegate Delegate)
+    {
+        OnServerMessageRead = Delegate;
+    }
+
+
 }
 
 

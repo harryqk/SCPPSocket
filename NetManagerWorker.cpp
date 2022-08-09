@@ -28,6 +28,13 @@ namespace scppsocket
         std::printf("destruct NetManagerWorker\n");
     }
 
+    void NetManagerWorker::SetOnNetworkDisconnectDelegate(OnNetworkDisconnectDelegate Delegate)
+    {
+        OnNetworkDisconnect = Delegate;
+    }
+
+
+
 }
 
 

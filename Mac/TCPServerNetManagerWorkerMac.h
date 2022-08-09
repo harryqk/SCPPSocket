@@ -4,36 +4,31 @@
 
 #ifndef SCPPSOCKET_TCPSERVERNETMANAGERWORKERMAC_H
 #define SCPPSOCKET_TCPSERVERNETMANAGERWORKERMAC_H
-#include "../NetManagerWorker.h"
+#include "../NetManagerWorkerServer.h"
 #include <list>
 #include "../SocketUtil.h"
 namespace scppsocket
 {
 
-    class TCPServerNetManagerWorkerMac:public NetManagerWorker
+    class TCPServerNetManagerWorkerMac:public NetManagerWorkerServer
     {
-        std::list<Connection*> ConnectionsToClient;
-        SCPPSocket* Local;
-    public:
-        SCPPSocket *GetLocal() const;
 
-        void SetLocal(SCPPSocket *local);
+    public:
+
 
     private:
-        int MacConnection;
+
         void HandleAccept();
         void HandleRead();
         fd_set readfds;
         fd_set testfds;
-        char* LenBuf;
-        char* ReadBuf;
+
     public:
         TCPServerNetManagerWorkerMac();
         virtual ~TCPServerNetManagerWorkerMac() override;
-        int GetMacConnection() const;
         virtual void DoWork() override;
-        void SetMacConnection(int macConnection);
-        virtual void SendMessage(const char *Msg, int Len) override;
+        virtual void SendMessage(int FileDescriptor, const char* Msg, int Len) override;
+        virtual void Broadcast(const char *Msg, int Len) override;
         virtual void StopWork() override;
     };
 

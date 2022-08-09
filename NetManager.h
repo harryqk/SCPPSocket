@@ -4,9 +4,11 @@
 
 #ifndef SCPPSOCKET_NETMANAGER_H
 #define SCPPSOCKET_NETMANAGER_H
-#include "NetManagerWorker.h"
+#include "NetManagerWorkerClient.h"
+#include "NetManagerWorkerServer.h"
 #include <list>
 #include <thread>
+#include "SCPPSocketDelegate.h"
 namespace scppsocket
 {
     class NetManager {
@@ -18,19 +20,39 @@ namespace scppsocket
         void StartTCPClient(const char* Address, int Port);
         void StopTCPClient();
         void TCPClientSendMessage(const char* Msg, int Len);
+        void TCPServerBroadcast(const char* Msg, int Len);
+        void TCPServerSendMessage(int FileDescriptor, const char* Msg, int Len);
         void Clear();
         NetManager();
         ~NetManager();
+        void SetOnClientMessageRead(OnClientMessageReadDelegate Delegate);
+        void SetOnServerMessageRead(OnServerMessageReadDelegate Delegate);
     private:
 
         NetManagerWorker* ClientWorker = nullptr;
         NetManagerWorker* ServerWorker = nullptr;
         SCPPSocket* Local;
-        void StartTCPClientSubThread(const char* Address, int Port);
         //std::list<Connection*> ConnectionsToClient;
         //Connection* ConnectionToServer;
         void Init();
         void Cleanup();
+        //client
+
+        OnClientMessageReadDelegate OnClientMessageRead;
+
+
+
+        OnConnectDelegate OnConnect;
+        //server
+
+        OnBindDelegate OnBind;
+        OnAcceptDelegate OnAccept;
+        OnRemoveClientDelegate OnRemoveClient;
+        OnServerMessageReadDelegate OnServerMessageRead;
+        //both
+        OnNetworkDisconnectDelegate OnNetworkDisconnect;
+
+
 
 
     };

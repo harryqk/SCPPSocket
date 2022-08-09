@@ -63,10 +63,16 @@ namespace scppsocket
                     ConnectionToServer->Read(LenBuf, 4);
                     int len = SocketUtil::BytesToInt((byte *)LenBuf);
                     ConnectionToServer->Read(ReadBuf, len);
-                    char* msg = new char[len];
-                    memcpy(msg, ReadBuf, len);
-                    printf("client read  %d\n", len);
-                    printf("client read  %s\n", msg);
+//                    char* msg = new char[len];
+//                    memcpy(msg, ReadBuf, len);
+//                    printf("client read  %d\n", len);
+//                    printf("client read  %s\n", msg);
+//                    delete[] msg;
+                    if(OnClientMessageRead != nullptr)
+                    {
+                        OnClientMessageRead(ReadBuf, len);
+                    }
+
                 }
             }
         }
@@ -80,22 +86,22 @@ namespace scppsocket
 
     TCPClientNetManagerWorkerMac::TCPClientNetManagerWorkerMac()
     {
-        LenBuf = new char[4];
-        ReadBuf = new char[1024];
+//        LenBuf = new char[4];
+//        ReadBuf = new char[1024];
         std::printf("construct TCPClientNetManagerWorkerMac\n");
     }
 
     TCPClientNetManagerWorkerMac::~TCPClientNetManagerWorkerMac()
     {
-        delete[] ReadBuf;
-        ReadBuf = nullptr;
-        delete[] LenBuf;
-        LenBuf = nullptr;
-        if(ConnectionToServer != nullptr)
-        {
-            delete ConnectionToServer;
-            ConnectionToServer = nullptr;
-        }
+//        delete[] ReadBuf;
+//        ReadBuf = nullptr;
+//        delete[] LenBuf;
+//        LenBuf = nullptr;
+//        if(ConnectionToServer != nullptr)
+//        {
+//            delete ConnectionToServer;
+//            ConnectionToServer = nullptr;
+//        }
 
 
         std::printf("destruct TCPClientNetManagerWorkerMac\n");
