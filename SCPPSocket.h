@@ -33,7 +33,20 @@ typedef size_t SockSize_t;
 typedef ssize_t SockSSize_t;
 
 #elif __ANDROID__
-
+#elif __linux__
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <arpa/inet.h>
+#include <sys/select.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+//#include <stdio.h>
+#include <string.h>
+typedef socklen_t SockLen_t;
+typedef int SSocket;
+typedef size_t SockSize_t;
+typedef ssize_t SockSSize_t;
 #endif
 #define SOCKET_ERROR (-1)
 namespace scppsocket

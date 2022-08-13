@@ -8,6 +8,8 @@
 #include "Win/SCPPSocketFactoryWin.h"
 #elif __APPLE__
 #include "Mac/SCPPSocketFactoryMac.h"
+#elif __linux__
+#include "Linux/SCPPSocketFactoryLinux.h"
 #elif __ANDROID__
 #endif
 
@@ -37,7 +39,7 @@ namespace scppsocket
                     return;
                 }
         #elif __APPLE__
-
+        #elif __linux__
         #elif __ANDROID__
         #endif
     }
@@ -49,6 +51,7 @@ namespace scppsocket
         #elif __APPLE__
 
         #elif __ANDROID__
+        #elif __linux__
         #endif
     }
 
@@ -61,6 +64,8 @@ namespace scppsocket
         Factory = new SCPPSocketFactoryWin();
 #elif __APPLE__
         Factory = new SCPPSocketFactoryMac();
+#elif __linux__
+        Factory = new SCPPSocketFactoryLinux();
 #elif __ANDROID__
 #endif
         Local = Factory->CreateSocket(SocketAddressFamily::IPv4, SocketType::SOCKTYPE_Streaming, SocketProtocol::TCP);
@@ -135,6 +140,8 @@ namespace scppsocket
         Factory = new SCPPSocketFactoryWin();
 #elif __APPLE__
         Factory = new SCPPSocketFactoryMac();
+#elif __linux__
+        Factory = new SCPPSocketFactoryLinux();
 #elif __ANDROID__
 #endif
         Local = Factory->CreateSocket(SocketAddressFamily::IPv4, SocketType::SOCKTYPE_Streaming, SocketProtocol::TCP);
