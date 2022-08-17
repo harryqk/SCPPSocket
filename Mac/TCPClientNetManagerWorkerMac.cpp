@@ -145,19 +145,37 @@ namespace scppsocket
                 {
                     printf("connect time out\n");
                 }
-                else if (1 == res)
+                else
                 {
                     if(FD_ISSET(client_fd,&wset))
                     {
-                        Connection* Conn = new TCPConnection(Local);
-                        ConnectionToServer = Conn;
-                        printf("connect succeed.\n");
-                        //Local->SetFileDescriptor(result);
-                        ret = 0;
+
+                        int OptError;
+                        socklen_t OptLen = sizeof(OptError);
+
+                        if(getsockopt(client_fd, SOL_SOCKET, SO_ERROR, &OptError, &OptLen) < 0)
+                        {
+                            //connect fail
+                            perror("connect fail");
+                        }
+
+                        if(OptError != 0)
+                        {
+                            //connect fail
+                            perror("connect fail");
+                        }
+                        else
+                        {
+                            Connection* Conn = new TCPConnection(Local);
+                            ConnectionToServer = Conn;
+                            printf("connect succeed.\n");
+                            //Local->SetFileDescriptor(result);
+                            ret = 0;
+                        }
                     }
                     else
                     {
-                        printf("other error when select:%s\n",strerror(errno));
+                        printf("connect fail");
                     }
                 }
             }
