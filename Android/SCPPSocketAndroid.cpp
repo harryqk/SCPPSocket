@@ -2,26 +2,29 @@
 // Created by harryqk on 7/17/22.
 //
 
-#include "SCPPSocketLinux.h"
+#include "SCPPSocketAndroid.h"
 #include <iostream>
 #include <fcntl.h>
 namespace scppsocket
 {
-    SCPPSocketLinux::SCPPSocketLinux(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol) : SCPPSocket(AddressFamily, Type, Protocol)
+    SCPPSocketAndroid::SCPPSocketAndroid(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol) : SCPPSocket(AddressFamily, Type, Protocol)
     {
         std::printf("this is SCPPSocketMac Construct\n");
         FileDescriptor = socket(AF_INET, SOCK_STREAM, 0);
         if (FileDescriptor == SOCKET_ERROR) {
-            perror("SCPPSocketLinux fail ");
+
+            int error = errno;
+            //perror("SCPPSocketAndroid fail ");
+
         }
     }
 
-    SCPPSocketLinux::~SCPPSocketLinux()
+    SCPPSocketAndroid::~SCPPSocketAndroid()
     {
         std::printf("this is SCPPSocketMac Destruct\n");
     }
 
-    int SCPPSocketLinux::Bind(int Port)
+    int SCPPSocketAndroid::Bind(int Port)
     {
         std::printf("this is mac bind\n");
 
@@ -44,7 +47,7 @@ namespace scppsocket
         return ret;
     }
 
-    int SCPPSocketLinux::Listen(int MaxConnect)
+    int SCPPSocketAndroid::Listen(int MaxConnect)
     {
         printf("this is mac Listen\n");
         int ret = listen(FileDescriptor, MaxConnect);
@@ -62,7 +65,7 @@ namespace scppsocket
         return ret;
     }
 
-    int SCPPSocketLinux::Connect(sockaddr *Address)
+    int SCPPSocketAndroid::Connect(sockaddr *Address)
     {
         struct sockaddr_in server_addr;
         //bzero(&server_addr,sizeof(server_addr)); //Init address
@@ -85,7 +88,7 @@ namespace scppsocket
         return ret;
     }
 
-    SSocket SCPPSocketLinux::Accept(sockaddr *Address)
+    SSocket SCPPSocketAndroid::Accept(sockaddr *Address)
     {
         SockLen_t Len = sizeof(struct  sockaddr);
         SSocket NewSock = accept(FileDescriptor, Address, &Len);
@@ -100,21 +103,21 @@ namespace scppsocket
         return NewSock;
     }
 
-    SockSSize_t SCPPSocketLinux::Send(const char *Buf, SockSize_t Len, int Flag)
+    SockSSize_t SCPPSocketAndroid::Send(const char *Buf, SockSize_t Len, int Flag)
     {
         std::printf("this is mac Send\n");
         SockSSize_t Sent = send(FileDescriptor, Buf, Len, Flag);
         return Sent;
     }
 
-    SockSSize_t SCPPSocketLinux::Read(char *Buf, SockSize_t Len, int Flag)
+    SockSSize_t SCPPSocketAndroid::Read(char *Buf, SockSize_t Len, int Flag)
     {
         std::printf("this is mac Recv\n");
         SockSSize_t Read = recv(FileDescriptor, Buf, Len, Flag);
         return Read;
     }
 
-    int SCPPSocketLinux::SetNonBlockMode(bool NonBlock)
+    int SCPPSocketAndroid::SetNonBlockMode(bool NonBlock)
     {
         int flags = 0;
 
@@ -161,12 +164,12 @@ namespace scppsocket
 
     }
 
-    SCPPSocketLinux::SCPPSocketLinux()
+    SCPPSocketAndroid::SCPPSocketAndroid()
     {
         std::printf("SCPPSocketMac default construct\n");
     }
 
-    bool SCPPSocketLinux::Close()
+    bool SCPPSocketAndroid::Close()
     {
         int ret;
         try {
@@ -188,7 +191,7 @@ namespace scppsocket
         }
     }
 
-    bool SCPPSocketLinux::ShutDown()
+    bool SCPPSocketAndroid::ShutDown()
     {
         int ret;
         try {
@@ -210,9 +213,9 @@ namespace scppsocket
         }
     }
 
-    SCPPSocket *SCPPSocketLinux::Clone(SSocket NewSocket, sockaddr_in NewPeerAddress)
+    SCPPSocket *SCPPSocketAndroid::Clone(SSocket NewSocket, sockaddr_in NewPeerAddress)
     {
-        SCPPSocketLinux* Mac = new SCPPSocketLinux(AddressFamily, Type, Protocol);
+        SCPPSocketAndroid* Mac = new SCPPSocketAndroid(AddressFamily, Type, Protocol);
         Mac->SetPeerAddress(NewPeerAddress);
         Mac->SetFileDescriptor(NewSocket);
         return Mac;

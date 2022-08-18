@@ -17,6 +17,7 @@ namespace scppsocket
 
         void SetIsWorking(bool isWorking);
         OnNetworkDisconnectDelegate OnNetworkDisconnect;
+        OnDebugPrintDelegate OnDebugPrint;
     public:;
         NetManagerWorker();
         virtual ~NetManagerWorker();
@@ -25,6 +26,7 @@ namespace scppsocket
         virtual void StopWork() = 0;
         //virtual void BroadcastMessage(const char *Msg, int Len) = 0;
         void SetOnNetworkDisconnectDelegate(OnNetworkDisconnectDelegate Delegate);
+        void SetOnDebugPrintDelegate(OnDebugPrintDelegate Delegate);
     };
 }
 

@@ -2,18 +2,18 @@
 // Created by harryqk on 7/17/22.
 //
 
-#ifndef SCPPSOCKET_SCPPSOCKETLINUX_H
-#define SCPPSOCKET_SCPPSOCKETLINUX_H
+#ifndef SCPPSOCKET_SCPPSOCKETANDROID_H
+#define SCPPSOCKET_SCPPSOCKETANDROID_H
 #include "../SCPPSocket.h"
 namespace scppsocket
 {
-    class SCPPSocketLinux :public SCPPSocket
+    class SCPPSocketAndroid :public SCPPSocket
     {
     public:
-        SCPPSocketLinux(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol);
+        SCPPSocketAndroid(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol);
 
-        SCPPSocketLinux();
-        virtual ~SCPPSocketLinux();
+        SCPPSocketAndroid();
+        virtual ~SCPPSocketAndroid();
         virtual int Bind(int Port) override;
         virtual int Listen(int MaxConnect) override;
         virtual int Connect(sockaddr* Address) override;
@@ -30,4 +30,4 @@ namespace scppsocket
 }
 
 
-#endif //SCPPSOCKET_SCPPSOCKETLINUX_H
+#endif //SCPPSOCKET_SCPPSOCKETANDROID_H

@@ -2,18 +2,18 @@
 // Created by harryqk on 7/21/22.
 //
 
-#ifndef SCPPSOCKET_TCPCLIENTNETMANAGERWORKERLINUX_H
-#define SCPPSOCKET_TCPCLIENTNETMANAGERWORKERLINUX_H
+#ifndef SCPPSOCKET_TCPCLIENTNETMANAGERWORKERANDROID_H
+#define SCPPSOCKET_TCPCLIENTNETMANAGERWORKERANDROID_H
 
 #include "../NetManagerWorkerClient.h"
 namespace scppsocket
 {
 
-    class TCPClientNetManagerWorkerLinux:public NetManagerWorkerClient
+    class TCPClientNetManagerWorkerAndroid:public NetManagerWorkerClient
     {
     public:
-        TCPClientNetManagerWorkerLinux();
-        virtual ~TCPClientNetManagerWorkerLinux() override;
+        TCPClientNetManagerWorkerAndroid();
+        virtual ~TCPClientNetManagerWorkerAndroid() override;
     private:
         int HandleConnect();
         void HandleRead();
@@ -31,4 +31,4 @@ namespace scppsocket
 
 
 
-#endif //SCPPSOCKET_TCPCLIENTNETMANAGERWORKERLINUX_H
+#endif //SCPPSOCKET_TCPCLIENTNETMANAGERWORKERANDROID_H

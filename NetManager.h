@@ -27,6 +27,7 @@ namespace scppsocket
         ~NetManager();
         void SetOnClientMessageRead(OnClientMessageReadDelegate Delegate);
         void SetOnServerMessageRead(OnServerMessageReadDelegate Delegate);
+        void SetOnDebugPrintDelegate(OnDebugPrintDelegate Delegate);
     private:
 
         NetManagerWorker* ClientWorker = nullptr;
@@ -51,7 +52,7 @@ namespace scppsocket
         OnServerMessageReadDelegate OnServerMessageRead;
         //both
         OnNetworkDisconnectDelegate OnNetworkDisconnect;
-
+        OnDebugPrintDelegate OnDebugPrint;
 
 
 

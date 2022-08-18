@@ -2,15 +2,15 @@
 // Created by harryqk on 7/17/22.
 //
 
-#ifndef SCPPSOCKET_SCPPSOCKETFACTORYLINUX_H
-#define SCPPSOCKET_SCPPSOCKETFACTORYLINUX_H
+#ifndef SCPPSOCKET_SCPPSOCKETFACTORYANDROID_H
+#define SCPPSOCKET_SCPPSOCKETFACTORYANDROID_H
 #include "../SCPPSocketFactory.h"
 namespace scppsocket
 {
-    class SCPPSocketFactoryLinux : public SCPPSocketFactory{
+    class SCPPSocketFactoryAndroid : public SCPPSocketFactory{
     public:
-        SCPPSocketFactoryLinux();
-        virtual ~SCPPSocketFactoryLinux() override;
+        SCPPSocketFactoryAndroid();
+        virtual ~SCPPSocketFactoryAndroid() override;
         virtual SCPPSocket* CreateSocket(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol) override;
         virtual sockaddr_in CreateAddress(const char* Address, int Port) override;
         virtual NetManagerWorker* CreateTCPServerNetMangerWorker(SCPPSocket* Local) override;
@@ -21,4 +21,4 @@ namespace scppsocket
 
 
 
-#endif //SCPPSOCKET_SCPPSOCKETFACTORYLINUX_H
+#endif //SCPPSOCKET_SCPPSOCKETFACTORYANDROID_H

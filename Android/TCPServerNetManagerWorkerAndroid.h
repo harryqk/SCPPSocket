@@ -2,15 +2,15 @@
 // Created by harryqk on 7/21/22.
 //
 
-#ifndef SCPPSOCKET_TCPSERVERNETMANAGERWORKERLINUX_H
-#define SCPPSOCKET_TCPSERVERNETMANAGERWORKERLINUX_H
+#ifndef SCPPSOCKET_TCPSERVERNETMANAGERWORKERANDROID_H
+#define SCPPSOCKET_TCPSERVERNETMANAGERWORKERANDROID_H
 #include "../NetManagerWorkerServer.h"
 #include <list>
 #include "../SocketUtil.h"
 namespace scppsocket
 {
 
-    class TCPServerNetManagerWorkerLinux:public NetManagerWorkerServer
+    class TCPServerNetManagerWorkerAndroid:public NetManagerWorkerServer
     {
 
     public:
@@ -24,8 +24,8 @@ namespace scppsocket
         fd_set testfds;
 
     public:
-        TCPServerNetManagerWorkerLinux();
-        virtual ~TCPServerNetManagerWorkerLinux() override;
+        TCPServerNetManagerWorkerAndroid();
+        virtual ~TCPServerNetManagerWorkerAndroid() override;
         virtual void DoWork() override;
         virtual void SendMessage(int FileDescriptor, const char* Msg, int Len) override;
         virtual void Broadcast(const char *Msg, int Len) override;
@@ -35,4 +35,4 @@ namespace scppsocket
 }
 
 
-#endif //SCPPSOCKET_TCPSERVERNETMANAGERWORKERLINUX_H
+#endif //SCPPSOCKET_TCPSERVERNETMANAGERWORKERANDROID_H

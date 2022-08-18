@@ -15,4 +15,5 @@ typedef void (*OnRemoveClientDelegate)(int FileDescriptor);
 typedef void (*OnServerMessageReadDelegate)(int FileDescriptor, const char* Message, int Len);
 //both
 typedef void (*OnNetworkDisconnectDelegate)(const char* Error);
+typedef void (*OnDebugPrintDelegate)(const char* Info);
 #endif //SCPPSOCKET_SCPPSOCKETDELEGATE_H

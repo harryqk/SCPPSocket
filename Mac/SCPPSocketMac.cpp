@@ -11,6 +11,9 @@ namespace scppsocket
     {
         std::printf("this is SCPPSocketMac Construct\n");
         FileDescriptor = socket(AF_INET, SOCK_STREAM, 0);
+        if (FileDescriptor == SOCKET_ERROR) {
+            perror("SCPPSocketMac fail ");
+        }
     }
 
     SCPPSocketMac::~SCPPSocketMac()

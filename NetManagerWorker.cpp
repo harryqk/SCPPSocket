@@ -33,6 +33,10 @@ namespace scppsocket
         OnNetworkDisconnect = Delegate;
     }
 
+    void NetManagerWorker::SetOnDebugPrintDelegate(OnDebugPrintDelegate Delegate)
+    {
+        OnDebugPrint = Delegate;
+    }
 
 
 }
