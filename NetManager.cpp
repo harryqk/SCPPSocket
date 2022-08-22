@@ -7,7 +7,17 @@
 #ifdef _WIN32
 #include "Win/SCPPSocketFactoryWin.h"
 #elif __APPLE__
-#include "Mac/SCPPSocketFactoryMac.h"
+#include "TargetConditionals.h"
+    #if TARGET_IPHONE_SIMULATOR
+         #include "IOS/SCPPSocketFactoryIOS.h"
+    #elif TARGET_OS_IPHONE
+        #include "IOS/SCPPSocketFactoryIOS.h"
+    #elif TARGET_OS_MAC
+        // Other kinds of Mac OS
+        #include "Mac/SCPPSocketFactoryMac.h"
+    #else
+    #   error "Unknown Apple platform"
+    #endif
 #elif __ANDROID__
 #include "Android/SCPPSocketFactoryAndroid.h"
 #elif __linux__
@@ -67,7 +77,17 @@ namespace scppsocket
 #ifdef _WIN32
         Factory = new SCPPSocketFactoryWin();
 #elif __APPLE__
-        Factory = new SCPPSocketFactoryMac();
+        
+        #if TARGET_IPHONE_SIMULATOR
+             Factory = new SCPPSocketFactoryIOS();
+        #elif TARGET_OS_IPHONE
+            Factory = new SCPPSocketFactoryIOS();
+        #elif TARGET_OS_MAC
+            // Other kinds of Mac OS
+            Factory = new SCPPSocketFactoryMac();
+        #else
+        #   error "Unknown Apple platform"
+        #endif
 #elif __ANDROID__
         Factory = new SCPPSocketFactoryAndroid();
 #elif __linux__
@@ -149,7 +169,16 @@ namespace scppsocket
 #ifdef _WIN32
         Factory = new SCPPSocketFactoryWin();
 #elif __APPLE__
-        Factory = new SCPPSocketFactoryMac();
+        #if TARGET_IPHONE_SIMULATOR
+             Factory = new SCPPSocketFactoryIOS();
+        #elif TARGET_OS_IPHONE
+            Factory = new SCPPSocketFactoryIOS();
+        #elif TARGET_OS_MAC
+            // Other kinds of Mac OS
+            Factory = new SCPPSocketFactoryMac();
+        #else
+        #   error "Unknown Apple platform"
+        #endif
 #elif __ANDROID__
         Factory = new SCPPSocketFactoryAndroid();
 #elif __linux__
