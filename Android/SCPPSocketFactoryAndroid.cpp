@@ -42,12 +42,12 @@ namespace scppsocket
 
     SCPPSocketFactoryAndroid::SCPPSocketFactoryAndroid()
     {
-        std::printf("construct SCPPSocketFactoryMac\n");
+        std::printf("construct SCPPSocketFactoryAndroid\n");
     }
 
     SCPPSocketFactoryAndroid::~SCPPSocketFactoryAndroid()
     {
-        std::printf("destruct SCPPSocketFactoryMac\n");
+        std::printf("destruct SCPPSocketFactoryAndroid\n");
     }
 
 

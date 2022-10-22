@@ -35,8 +35,8 @@ namespace scppsocket
 
             if(result < 1)
             {
-                printf("mac client select return errno=%d\n", errno);
-                perror("mac client select return error");
+                printf("Android client select return errno=%d\n", errno);
+                perror("Android client select return error");
                 FD_CLR(Local->GetFileDescriptor(), &readfds);
                 Local->Close();
                 printf("client close socket on fd %d\n", fd);

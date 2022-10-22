@@ -27,27 +27,27 @@ namespace scppsocket
 
     NetManagerWorker *SCPPSocketFactoryLinux::CreateTCPClientNetMangerWorker(SCPPSocket* Local)
     {
-        TCPClientNetManagerWorkerLinux* Mac = new TCPClientNetManagerWorkerLinux();
-        Mac->Local = Local;
+        TCPClientNetManagerWorkerLinux* Linux = new TCPClientNetManagerWorkerLinux();
+        Linux->Local = Local;
         //Mac->ConnectionToServer = ConnectionToServer;
-        return Mac;
+        return Linux;
     }
 
     NetManagerWorker *SCPPSocketFactoryLinux::CreateTCPServerNetMangerWorker(SCPPSocket* Local)
     {
-        TCPServerNetManagerWorkerLinux* Mac = new TCPServerNetManagerWorkerLinux();
-        Mac->SetLocal(Local);
-        return Mac;
+        TCPServerNetManagerWorkerLinux* Linux = new TCPServerNetManagerWorkerLinux();
+        Linux->SetLocal(Local);
+        return Linux;
     }
 
     SCPPSocketFactoryLinux::SCPPSocketFactoryLinux()
     {
-        std::printf("construct SCPPSocketFactoryMac\n");
+        std::printf("construct SCPPSocketFactoryLinux\n");
     }
 
     SCPPSocketFactoryLinux::~SCPPSocketFactoryLinux()
     {
-        std::printf("destruct SCPPSocketFactoryMac\n");
+        std::printf("destruct SCPPSocketFactoryLinux\n");
     }
 
 

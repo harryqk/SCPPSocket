@@ -25,8 +25,8 @@ namespace scppsocket
             result = select(FD_SETSIZE, &testfds, (fd_set *) nullptr,(fd_set *)nullptr, (struct timeval *) nullptr);
             if(result < 1)
             {
-                printf("mac server select return errno=%d\n", errno);
-                perror("mac server select return error");
+                printf("Linux server select return errno=%d\n", errno);
+                perror("Linux server select return error");
                 FD_CLR(Local->GetFileDescriptor(), &readfds);
                 Local->Close();
                 break;
@@ -109,12 +109,12 @@ namespace scppsocket
 
     TCPServerNetManagerWorkerLinux::TCPServerNetManagerWorkerLinux()
     {
-        std::printf("construct TCPServerNetManagerWorkerMac\n");
+        std::printf("construct TCPServerNetManagerWorkerLinux\n");
     }
 
     TCPServerNetManagerWorkerLinux::~TCPServerNetManagerWorkerLinux()
     {
-        std::printf("destruct TCPServerNetManagerWorkerMac\n");
+        std::printf("destruct TCPServerNetManagerWorkerLinux\n");
     }
 
     void TCPServerNetManagerWorkerLinux::SendMessage(int FileDescriptor, const char* Msg, int Len)
@@ -161,7 +161,7 @@ namespace scppsocket
             Local->ShutDown();
             Local->Close();
         }
-        std::printf("TCPServerNetManagerWorkerMac StopWork\n");
+        std::printf("TCPServerNetManagerWorkerLinux StopWork\n");
     }
 }
 

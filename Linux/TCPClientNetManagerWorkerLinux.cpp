@@ -88,7 +88,7 @@ namespace scppsocket
     {
 //        LenBuf = new char[4];
 //        ReadBuf = new char[1024];
-        std::printf("construct TCPClientNetManagerWorkerMac\n");
+        std::printf("construct TCPClientNetManagerWorkerLinux\n");
     }
 
     TCPClientNetManagerWorkerLinux::~TCPClientNetManagerWorkerLinux()
@@ -104,7 +104,7 @@ namespace scppsocket
 //        }
 
 
-        std::printf("destruct TCPClientNetManagerWorkerMac\n");
+        std::printf("destruct TCPClientNetManagerWorkerLinux\n");
     }
 
 

@@ -67,11 +67,6 @@ namespace scppsocket
 
     int SCPPSocketWin::Connect(sockaddr *Address)
     {
-        sockaddr_in server_addr;
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_addr.s_addr = inet_addr("192.168.0.1");
-        server_addr.sin_port = htons(1500);
-
         //----------------------
         // Connect to server.
         int ret = connect(FileDescriptor, Address, sizeof (sockaddr));
@@ -210,10 +205,10 @@ namespace scppsocket
 
     SCPPSocket *SCPPSocketWin::Clone(SSocket NewSocket, sockaddr_in NewPeerAddress)
     {
-        SCPPSocketWin* Mac = new SCPPSocketWin(AddressFamily, Type, Protocol);
-        Mac->SetPeerAddress(NewPeerAddress);
-        Mac->SetFileDescriptor(NewSocket);
-        return Mac;
+        SCPPSocketWin* Win = new SCPPSocketWin(AddressFamily, Type, Protocol);
+        Win->SetPeerAddress(NewPeerAddress);
+        Win->SetFileDescriptor(NewSocket);
+        return Win;
     }
 
 }

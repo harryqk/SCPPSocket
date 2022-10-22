@@ -64,14 +64,7 @@ namespace scppsocket
 
     int SCPPSocketIOS::Connect(sockaddr *Address)
     {
-        struct sockaddr_in server_addr;
-        bzero(&server_addr,sizeof(server_addr)); //Init address
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_port = htons(1500);
-        inet_pton(AF_INET, "192.168.1.9", &server_addr.sin_addr);
 
-        //int ret = connect(FileDescriptor, Address, sizeof(Address));
-        //int ret = connect(FileDescriptor, (struct sockaddr*)&server_addr, sizeof(server_addr));
         int ret = connect(FileDescriptor, Address, sizeof(sockaddr));
         if (ret == SOCKET_ERROR)
         {

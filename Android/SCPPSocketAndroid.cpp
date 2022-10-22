@@ -9,7 +9,7 @@ namespace scppsocket
 {
     SCPPSocketAndroid::SCPPSocketAndroid(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol) : SCPPSocket(AddressFamily, Type, Protocol)
     {
-        std::printf("this is SCPPSocketMac Construct\n");
+        std::printf("this is SCPPSocketAndroid Construct\n");
         FileDescriptor = socket(AF_INET, SOCK_STREAM, 0);
         if (FileDescriptor == SOCKET_ERROR) {
 
@@ -21,12 +21,12 @@ namespace scppsocket
 
     SCPPSocketAndroid::~SCPPSocketAndroid()
     {
-        std::printf("this is SCPPSocketMac Destruct\n");
+        std::printf("this is SCPPSocketAndroid Destruct\n");
     }
 
     int SCPPSocketAndroid::Bind(int Port)
     {
-        std::printf("this is mac bind\n");
+        std::printf("this is Android bind\n");
 
         struct sockaddr_in Address;
         //memset(&Address, 0, sizeof(Address));
@@ -38,28 +38,28 @@ namespace scppsocket
         if(ret == SOCKET_ERROR)
         {
             //printf("this is mac Bind fail, errno=%d\n", errno);
-            perror("mac Bind fail");
+            perror("Android Bind fail");
         }
         else
         {
-            printf("this is mac Bind success\n");
+            printf("this is Android Bind success\n");
         }
         return ret;
     }
 
     int SCPPSocketAndroid::Listen(int MaxConnect)
     {
-        printf("this is mac Listen\n");
+        printf("this is Android Listen\n");
         int ret = listen(FileDescriptor, MaxConnect);
         if(ret < 0)
         {
             //printf("this is mac Listen fail, errno=%d\n", errno);
-            perror("mac Listen fail");
+            perror("Android Listen fail");
 
         }
         else
         {
-            printf("this is mac Listen success\n");
+            printf("this is Android Listen success\n");
         }
 
         return ret;
@@ -67,23 +67,15 @@ namespace scppsocket
 
     int SCPPSocketAndroid::Connect(sockaddr *Address)
     {
-        struct sockaddr_in server_addr;
-        //bzero(&server_addr,sizeof(server_addr)); //Init address
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_port = htons(1500);
-        inet_pton(AF_INET, "192.168.1.9", &server_addr.sin_addr);
-
-        //int ret = connect(FileDescriptor, Address, sizeof(Address));
-        //int ret = connect(FileDescriptor, (struct sockaddr*)&server_addr, sizeof(server_addr));
         int ret = connect(FileDescriptor, Address, sizeof(sockaddr));
         if (ret == SOCKET_ERROR)
         {
             //std::printf("Mac Connect Error\n");
-            perror("Mac Connect Error");
+            perror("Android Connect Error");
             //close(FileDescriptor);
         }
         else {
-            std::printf("Mac Connect Success\n");
+            std::printf("Android Connect Success\n");
         }
         return ret;
     }
@@ -95,24 +87,24 @@ namespace scppsocket
         if (NewSock == SOCKET_ERROR)
         {
             //printf("Mac Accept fail, errno=%d\n", errno);
-            perror("Mac Accept fail");
+            perror("Android Accept fail");
         }
         else {
-            std::printf("Mac Accept Success\n");
+            std::printf("Android Accept Success\n");
         }
         return NewSock;
     }
 
     SockSSize_t SCPPSocketAndroid::Send(const char *Buf, SockSize_t Len, int Flag)
     {
-        std::printf("this is mac Send\n");
+        std::printf("this is Android Send\n");
         SockSSize_t Sent = send(FileDescriptor, Buf, Len, Flag);
         return Sent;
     }
 
     SockSSize_t SCPPSocketAndroid::Read(char *Buf, SockSize_t Len, int Flag)
     {
-        std::printf("this is mac Recv\n");
+        std::printf("this is Android Recv\n");
         SockSSize_t Read = recv(FileDescriptor, Buf, Len, Flag);
         return Read;
     }
@@ -125,7 +117,7 @@ namespace scppsocket
         if (SOCKET_ERROR == flags)
         {
             //printf("get sockfd flag -1, errno=%d\n", errno);
-            perror("mac SetNonBlockMode error");
+            perror("Android SetNonBlockMode error");
             BlockMode = SocketBlockMode::Unknown;
             return BlockMode;
         }
@@ -135,7 +127,7 @@ namespace scppsocket
             if (fcntl(FileDescriptor, F_SETFL, flags | O_NONBLOCK) == SOCKET_ERROR)
             {
                 //printf("set sockfd nonblock -1, errno=%d\n", errno);
-                perror("Mac SetNonBlockMode error");
+                perror("Android SetNonBlockMode error");
                 BlockMode = SocketBlockMode::Unknown;
                 return BlockMode;
             }
@@ -149,7 +141,7 @@ namespace scppsocket
             if (fcntl(FileDescriptor, F_SETFL, flags & (~O_NONBLOCK)) == SOCKET_ERROR)
             {
                 //printf("set sockfd nonblock -1, errno=%d\n", errno);
-                perror("mac SetNonBlockMode error");
+                perror("Android SetNonBlockMode error");
                 BlockMode = SocketBlockMode::Unknown;
                 return BlockMode;
             }
@@ -166,7 +158,7 @@ namespace scppsocket
 
     SCPPSocketAndroid::SCPPSocketAndroid()
     {
-        std::printf("SCPPSocketMac default construct\n");
+        std::printf("SCPPSocketAndroid default construct\n");
     }
 
     bool SCPPSocketAndroid::Close()
@@ -177,16 +169,16 @@ namespace scppsocket
         }
         catch(std::exception e)
         {
-            printf("mac close exception=%s\n", e.what());
+            printf("Android close exception=%s\n", e.what());
         }
         if(ret == SOCKET_ERROR)
         {
             //printf("mac close errno=%d\n", errno);
-            perror("Mac close error");
+            perror("Android close error");
             return false;
         } else
         {
-            printf("mac close success\n");
+            printf("Android close success\n");
             return true;
         }
     }
@@ -199,25 +191,25 @@ namespace scppsocket
         }
         catch(std::exception e)
         {
-            printf("mac shutdown exception=%s\n", e.what());
+            printf("Android shutdown exception=%s\n", e.what());
         }
         if(ret == SOCKET_ERROR)
         {
             //printf("mac shut down errno=%d\n", errno);
-            perror("Mac shut down error");
+            perror("Android shut down error");
             return false;
         } else
         {
-            printf("mac shut down success\n");
+            printf("Android shut down success\n");
             return true;
         }
     }
 
     SCPPSocket *SCPPSocketAndroid::Clone(SSocket NewSocket, sockaddr_in NewPeerAddress)
     {
-        SCPPSocketAndroid* Mac = new SCPPSocketAndroid(AddressFamily, Type, Protocol);
-        Mac->SetPeerAddress(NewPeerAddress);
-        Mac->SetFileDescriptor(NewSocket);
-        return Mac;
+        SCPPSocketAndroid* Android = new SCPPSocketAndroid(AddressFamily, Type, Protocol);
+        Android->SetPeerAddress(NewPeerAddress);
+        Android->SetFileDescriptor(NewSocket);
+        return Android;
     }
 }

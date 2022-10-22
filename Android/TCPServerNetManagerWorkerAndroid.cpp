@@ -25,8 +25,8 @@ namespace scppsocket
             result = select(FD_SETSIZE, &testfds, (fd_set *) nullptr,(fd_set *)nullptr, (struct timeval *) nullptr);
             if(result < 1)
             {
-                printf("mac server select return errno=%d\n", errno);
-                perror("mac server select return error");
+                printf("Android server select return errno=%d\n", errno);
+                perror("Android server select return error");
                 FD_CLR(Local->GetFileDescriptor(), &readfds);
                 Local->Close();
                 break;
@@ -109,12 +109,12 @@ namespace scppsocket
 
     TCPServerNetManagerWorkerAndroid::TCPServerNetManagerWorkerAndroid()
     {
-        std::printf("construct TCPServerNetManagerWorkerMac\n");
+        std::printf("construct TCPServerNetManagerWorkerAndroid\n");
     }
 
     TCPServerNetManagerWorkerAndroid::~TCPServerNetManagerWorkerAndroid()
     {
-        std::printf("destruct TCPServerNetManagerWorkerMac\n");
+        std::printf("destruct TCPServerNetManagerWorkerAndroid\n");
     }
 
     void TCPServerNetManagerWorkerAndroid::SendMessage(int FileDescriptor, const char* Msg, int Len)

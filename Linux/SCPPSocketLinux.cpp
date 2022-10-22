@@ -9,7 +9,7 @@ namespace scppsocket
 {
     SCPPSocketLinux::SCPPSocketLinux(SocketAddressFamily AddressFamily, SocketType Type, SocketProtocol Protocol) : SCPPSocket(AddressFamily, Type, Protocol)
     {
-        std::printf("this is SCPPSocketMac Construct\n");
+        std::printf("this is SCPPSocketLinux Construct\n");
         FileDescriptor = socket(AF_INET, SOCK_STREAM, 0);
         if (FileDescriptor == SOCKET_ERROR) {
             perror("SCPPSocketLinux fail ");
@@ -18,12 +18,12 @@ namespace scppsocket
 
     SCPPSocketLinux::~SCPPSocketLinux()
     {
-        std::printf("this is SCPPSocketMac Destruct\n");
+        std::printf("this is SCPPSocketLinux Destruct\n");
     }
 
     int SCPPSocketLinux::Bind(int Port)
     {
-        std::printf("this is mac bind\n");
+        std::printf("this is Linux bind\n");
 
         struct sockaddr_in Address;
         //memset(&Address, 0, sizeof(Address));
@@ -35,28 +35,28 @@ namespace scppsocket
         if(ret == SOCKET_ERROR)
         {
             //printf("this is mac Bind fail, errno=%d\n", errno);
-            perror("mac Bind fail");
+            perror("Linux Bind fail");
         }
         else
         {
-            printf("this is mac Bind success\n");
+            printf("this is Linux Bind success\n");
         }
         return ret;
     }
 
     int SCPPSocketLinux::Listen(int MaxConnect)
     {
-        printf("this is mac Listen\n");
+        printf("this is Linux Listen\n");
         int ret = listen(FileDescriptor, MaxConnect);
         if(ret < 0)
         {
             //printf("this is mac Listen fail, errno=%d\n", errno);
-            perror("mac Listen fail");
+            perror("Linux Listen fail");
 
         }
         else
         {
-            printf("this is mac Listen success\n");
+            printf("this is Linux Listen success\n");
         }
 
         return ret;
@@ -64,23 +64,16 @@ namespace scppsocket
 
     int SCPPSocketLinux::Connect(sockaddr *Address)
     {
-        struct sockaddr_in server_addr;
-        //bzero(&server_addr,sizeof(server_addr)); //Init address
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_port = htons(1500);
-        inet_pton(AF_INET, "192.168.1.9", &server_addr.sin_addr);
 
-        //int ret = connect(FileDescriptor, Address, sizeof(Address));
-        //int ret = connect(FileDescriptor, (struct sockaddr*)&server_addr, sizeof(server_addr));
         int ret = connect(FileDescriptor, Address, sizeof(sockaddr));
         if (ret == SOCKET_ERROR)
         {
-            //std::printf("Mac Connect Error\n");
-            perror("Mac Connect Error");
+
+            perror("Linux Connect Error");
             //close(FileDescriptor);
         }
         else {
-            std::printf("Mac Connect Success\n");
+            std::printf("Linux Connect Success\n");
         }
         return ret;
     }
@@ -92,24 +85,24 @@ namespace scppsocket
         if (NewSock == SOCKET_ERROR)
         {
             //printf("Mac Accept fail, errno=%d\n", errno);
-            perror("Mac Accept fail");
+            perror("Linux Accept fail");
         }
         else {
-            std::printf("Mac Accept Success\n");
+            std::printf("Linux Accept Success\n");
         }
         return NewSock;
     }
 
     SockSSize_t SCPPSocketLinux::Send(const char *Buf, SockSize_t Len, int Flag)
     {
-        std::printf("this is mac Send\n");
+        std::printf("this is Linux Send\n");
         SockSSize_t Sent = send(FileDescriptor, Buf, Len, Flag);
         return Sent;
     }
 
     SockSSize_t SCPPSocketLinux::Read(char *Buf, SockSize_t Len, int Flag)
     {
-        std::printf("this is mac Recv\n");
+        std::printf("this is Linux Recv\n");
         SockSSize_t Read = recv(FileDescriptor, Buf, Len, Flag);
         return Read;
     }
@@ -122,7 +115,7 @@ namespace scppsocket
         if (SOCKET_ERROR == flags)
         {
             //printf("get sockfd flag -1, errno=%d\n", errno);
-            perror("mac SetNonBlockMode error");
+            perror("Linux SetNonBlockMode error");
             BlockMode = SocketBlockMode::Unknown;
             return BlockMode;
         }
@@ -132,7 +125,7 @@ namespace scppsocket
             if (fcntl(FileDescriptor, F_SETFL, flags | O_NONBLOCK) == SOCKET_ERROR)
             {
                 //printf("set sockfd nonblock -1, errno=%d\n", errno);
-                perror("Mac SetNonBlockMode error");
+                perror("Linux SetNonBlockMode error");
                 BlockMode = SocketBlockMode::Unknown;
                 return BlockMode;
             }
@@ -146,7 +139,7 @@ namespace scppsocket
             if (fcntl(FileDescriptor, F_SETFL, flags & (~O_NONBLOCK)) == SOCKET_ERROR)
             {
                 //printf("set sockfd nonblock -1, errno=%d\n", errno);
-                perror("mac SetNonBlockMode error");
+                perror("Linux SetNonBlockMode error");
                 BlockMode = SocketBlockMode::Unknown;
                 return BlockMode;
             }
